@@ -1,0 +1,61 @@
+name: Deploy Web sites to GitHub Pages
+
+run-name: ${{ github.actor }} Deploy Web sites to GitHub Pages 🚀
+
+on: 
+  push:
+  workflow_dispatch:
+  schedule: # Runs everyday at 8:00 AM
+    - cron: '0 0 * * *'
+
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4.0.0
+        with:
+          submodules: true
+          fetch-depth: 0
+        
+      - name: Setup Python
+        uses: actions/setup-python@v4.7.0
+        with:
+          python-version: '3.10.12'
+
+      - name: Configure pip caching
+        uses: actions/cache@v3.3.2
+        with:
+          # A list of files, directories, and wildcard patterns to cache and restore
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+
+      - name: Install python dependencies
+        run: python3 -m pip install -r requirements.txt
+
+      - name: Build ${{ github.repository }}
+        run: |
+          mkdocs build
+          rm -f site/CNAME
+
+      # - name: Show ${{ github.repository }}
+      #   run: |
+      #     ls -lh
+      #     echo "#######################"
+      #     ls -lh site
+      
+      # - name: Deploy Web
+      #   run: |
+      #     mkdocs gh-deploy --force
+      #     mkdocs --version
+      - name: Deploy WebSite
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: ./site
+          cname: ansible.wglee.org
+          force_orphan: true
+          user_name: "Github Action"
+          user_email: "action@github.com"
+          commit_message: ${{ github.event.head_commit.message }}
