@@ -5,8 +5,8 @@ run-name: ${{ github.actor }} Deploy Web sites to GitHub Pages 🚀
 on: 
   push:
   workflow_dispatch:
-  schedule: # Runs everyday at 8:00 AM
-    - cron: '0 0 * * *'
+#schedule: # Runs everyday at 8:00 AM
+#- cron: '0 0 * * *'
 
 jobs:
   Explore-GitHub-Actions:
@@ -39,16 +39,11 @@ jobs:
           mkdocs build
           rm -f site/CNAME
 
-      # - name: Show ${{ github.repository }}
-      #   run: |
-      #     ls -lh
-      #     echo "#######################"
-      #     ls -lh site
-      
-      # - name: Deploy Web
+      # - name: Deploy WebSite
       #   run: |
       #     mkdocs gh-deploy --force
       #     mkdocs --version
+      
       - name: Deploy WebSite
         uses: peaceiris/actions-gh-pages@v3
         with:
