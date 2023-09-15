@@ -43,11 +43,12 @@ jobs:
       #   run: |
       #     mkdocs gh-deploy --force
       #     mkdocs --version
-      
+
+      # https://github.com/marketplace/actions/github-pages-action
       - name: Deploy WebSite
         uses: peaceiris/actions-gh-pages@v3
         with:
-          personal_token: ${{ secrets.GH_TOKEN }}
+          deploy_key: ${{ secrets.GH_DEPLOY_KEY }}
           publish_dir: ./site
           cname: ansible.wglee.org
           force_orphan: true
